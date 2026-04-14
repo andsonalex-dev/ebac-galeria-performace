@@ -1,24 +1,10 @@
-const images = [
-  "AdobeStock_120501967_Preview.jpeg",
-  "AdobeStock_257851798_Preview.jpeg",
-  "AdobeStock_315349043_Preview.jpeg",
-  "AdobeStock_471079403_Preview.jpeg",
-  "AdobeStock_84221257_Preview.jpeg",
-  "adam-kool-ndN00KmbJ1c-unsplash.jpg",
-  "blake-verdoorn-cssvEZacHvQ-unsplash.jpg",
-  "casey-horner-4rDCa5hBlCs-unsplash.jpg",
-  "enrico-bet-IicyiaPYGGI-unsplash.jpg",
-  "goutham-krishna-h5wvMCdOV3w-unsplash.jpg",
-  "matthew-smith-Rfflri94rs8-unsplash.jpg",
-  "robert-lukeman-_RBcxo9AU-U-unsplash.jpg",
-  "shifaaz-shamoon-sLAk1guBG90-unsplash.jpg",
-  "urban-vintage-78A265wPiO4-unsplash.jpg",
-  "v2osk-1Z2niiBPg5A-unsplash.jpg"
-];
+const images = Array.isArray(window.GALLERY_IMAGES) ? window.GALLERY_IMAGES : [];
 
 const gallery = document.getElementById("gallery");
 const viewer = document.getElementById("viewer");
 const viewerImage = document.getElementById("viewerImage");
+const viewerSourceAvif = document.getElementById("viewerSourceAvif");
+const viewerSourceWebp = document.getElementById("viewerSourceWebp");
 const counter = document.getElementById("counter");
 const backButton = document.getElementById("backButton");
 const prevButton = document.getElementById("prevButton");
@@ -26,18 +12,32 @@ const nextButton = document.getElementById("nextButton");
 
 let currentIndex = 0;
 
-function formatName(fileName) {
-  return fileName
-    .replace(/\.[^.]+$/, "")
-    .replace(/[-_]/g, " ");
-}
-
 function renderGallery() {
-  const cards = images.map((fileName, index) => {
+  if (!images.length) {
+    gallery.innerHTML = '<p class="empty-state">Nenhuma imagem otimizada foi encontrada. Execute o build do projeto.</p>';
+    return;
+  }
+
+  const cards = images.map((image, index) => {
+    const loading = index === 0 ? "eager" : "lazy";
+    const fetchPriority = index === 0 ? "high" : "auto";
+
     return `
       <article class="thumb" data-index="${index}">
-        <img src="images/${fileName}" alt="${formatName(fileName)}">
-        <p class="thumb-label">${formatName(fileName)}</p>
+        <picture>
+          <source type="image/avif" srcset="${image.thumb.avif}">
+          <source type="image/webp" srcset="${image.thumb.webp}">
+          <img
+            src="${image.thumb.fallback}"
+            alt="${image.label}"
+            loading="${loading}"
+            fetchpriority="${fetchPriority}"
+            decoding="async"
+            width="${image.thumb.width}"
+            height="${image.thumb.height}"
+          >
+        </picture>
+        <p class="thumb-label">${image.label}</p>
       </article>
     `;
   });
@@ -46,8 +46,13 @@ function renderGallery() {
 
 function updateViewer(index) {
   currentIndex = index;
-  viewerImage.src = `images/${images[currentIndex]}`;
-  viewerImage.alt = formatName(images[currentIndex]);
+  const image = images[currentIndex];
+  viewerSourceAvif.srcset = image.full.avif;
+  viewerSourceWebp.srcset = image.full.webp;
+  viewerImage.src = image.full.fallback;
+  viewerImage.alt = image.label;
+  viewerImage.width = image.full.width;
+  viewerImage.height = image.full.height;
   counter.textContent = `${currentIndex + 1} / ${images.length}`;
 }
 

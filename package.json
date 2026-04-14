@@ -1,0 +1,29 @@
+{
+  "name": "galeria",
+  "version": "1.0.0",
+  "description": "Galeria estática com otimização automática de imagens e build de produção.",
+  "main": "script.js",
+  "scripts": {
+    "build:images": "node tools/optimize-assets.js",
+    "build:css": "cleancss -o style.min.css style.css",
+    "build:js": "terser gallery-data.js -c -m -o gallery-data.min.js && terser script.js -c -m -o script.min.js",
+    "build": "npm run build:images && npm run build:css && npm run build:js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andsonalex-dev/ebac-galeria-performace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/andsonalex-dev/ebac-galeria-performace/issues"
+  },
+  "homepage": "https://github.com/andsonalex-dev/ebac-galeria-performace#readme",
+  "dependencies": {
+    "clean-css-cli": "^5.6.3",
+    "sharp": "^0.34.5",
+    "terser": "^5.46.1"
+  }
+}
