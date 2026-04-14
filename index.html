@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeria de Imagens</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1 class="title">Galeria</h1>
+      <p class="subtitle">Clique em uma miniatura para abrir a imagem completa.</p>
+    </header>
+
+    <section id="gallery" class="gallery" aria-label="Galeria de imagens"></section>
+  </main>
+
+  <section id="viewer" class="viewer" aria-modal="true" role="dialog" aria-label="Visualizador de imagem">
+    <button id="backButton" class="ctrl btn-back" type="button">Voltar</button>
+    <button id="prevButton" class="ctrl btn-prev" type="button" aria-label="Imagem anterior">&#8249;</button>
+    <div class="viewer-content">
+      <img id="viewerImage" class="viewer-image" alt="Imagem ampliada">
+    </div>
+    <button id="nextButton" class="ctrl btn-next" type="button" aria-label="Próxima imagem">&#8250;</button>
+    <p id="counter" class="counter"></p>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
